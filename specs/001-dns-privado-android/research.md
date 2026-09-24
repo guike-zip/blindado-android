@@ -198,6 +198,25 @@ endereços separados) — é mais provável que seja uma limitação mais profun
 rede virtual deste emulador específico (AVD `movase_test`, imagem arm64, Android 14) entrega
 tráfego roteado a uma interface TUN pertencente a um app de terceiros. Isso não invalida a hipótese
 de "limitação do emulador" — só descarta a causa específica de endereço compartilhado como
-explicação completa. **T042 continua sendo o único caminho para confirmar se o bloqueio de domínio
-funciona de verdade** — nenhuma investigação adicional em emulador tem probabilidade alta de
-resolver essa incerteza; o próximo dado útil só vem de hardware físico real.
+explicação completa.
+
+**Segunda atualização (mesmo dia): testado em um AVD completamente diferente, resultado idêntico**.
+Para descartar a hipótese de "só este AVD específico (`movase_test`) está com algo errado", criado
+um AVD novo do zero (`blindado_playstore_test`) a partir de uma imagem de sistema diferente em
+todos os eixos relevantes: `android-36` (não 34), tag `google_apis_playstore` (não `google_apis`
+puro — imagem mais próxima do que roda em hardware OEM real), device profile recriado do zero
+(não copiado do AVD anterior). Resultado: **exatamente o mesmo padrão**:
+
+- `ping 10.0.0.2` responde em ~0.037–0.039ms (mesma faixa de antes — indicando resposta local do
+  kernel/emulador, não um round-trip real via o app).
+- Tela "Testar" reporta os 4 domínios como "Bloqueado", incluindo `example.com`.
+
+Isso descarta definitivamente "AVD específico com problema" ou "tag de imagem específica" como
+explicação — dois AVDs, duas versões de API, duas tags de imagem, dois perfis de dispositivo,
+mesmo resultado. A causa é uma característica geral de como o emulador Android roda nesta máquina
+(Mac com Apple Silicon, host arm64) entrega tráfego roteado a uma interface TUN de VPN de
+terceiros — não algo que escolher outra imagem ou outro AVD resolveria.
+
+**T042 continua sendo o único caminho para confirmar se o bloqueio de domínio funciona de
+verdade** — mais investigação em emulador nesta máquina não tem probabilidade realista de resolver
+essa incerteza; o próximo dado útil só vem de hardware físico real.
