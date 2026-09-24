@@ -107,9 +107,23 @@ controle do Blindado. Fica como possível v2, não decidida aqui.
 
 **Decision**: os mesmos dois provedores usados no app irmão de iOS — AdGuard DNS e Control D —
 cada um com endpoints diferentes para o nível Padrão (bloqueio de anúncios/rastreadores) e
-Família (também bloqueia conteúdo adulto), confirmando os hostnames DoH exatos de cada provedor
-para cada nível durante a implementação (não inventados aqui sem checar a documentação oficial
-de cada provedor).
+Família (também bloqueia conteúdo adulto).
+
+**CONFIRMADO (2026-09-24)** contra documentação oficial via busca web, não mais uma suposição:
+
+- AdGuard DNS Padrão: `https://dns.adguard-dns.com/dns-query`
+- AdGuard DNS Família: `https://family.adguard-dns.com/dns-query`
+- Control D Padrão: `https://freedns.controld.com/p2` ("Block Malware + Ads")
+- Control D Família: `https://freedns.controld.com/family` ("Block Malware + Ads + Social +
+  Adult Content + Drugs")
+
+Estes são exatamente os valores já implementados em `ProviderCatalog.kt` — a implementação não
+precisou de nenhuma correção, mas a pendência sinalizada aqui (research.md original) e em
+`ProviderCatalog.kt`/`tasks.md` T029 está resolvida e não deve mais ser tratada como suposição
+não verificada.
 
 **Rationale**: consistência de produto com o app irmão; ambos os provedores já são conhecidos
 por suportar DoH padrão RFC 8484 compatível com a decisão #4.
+
+**Fontes**: [AdGuard DNS Knowledge Base — Known DNS Providers](https://adguard-dns.io/kb/general/dns-providers/),
+[Control D — Free DNS Resolvers](https://docs.controld.com/docs/free-dns).

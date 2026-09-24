@@ -7,10 +7,8 @@ import io.blindado.android.domain.ProtectionLevel
  * Catálogo dos provedores DoH suportados por [ProtectionLevel] (research.md #6) — mesmos dois
  * provedores usados no app irmão de iOS, para consistência de produto.
  *
- * PENDÊNCIA: os hostnames abaixo são os endpoints públicos conhecidos de cada provedor no
- * momento da implementação — DEVEM ser reconfirmados contra a documentação oficial atual da
- * AdGuard e da Control D antes do lançamento (research.md #6 pede explicitamente para não
- * inventar isso sem checar).
+ * Hostnames confirmados em 2026-09-24 contra a documentação oficial da AdGuard e da Control D
+ * (ver research.md #6 para as fontes) — não são mais uma suposição não verificada.
  */
 object ProviderCatalog {
 
