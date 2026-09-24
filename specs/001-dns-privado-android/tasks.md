@@ -245,7 +245,7 @@ o conteúdo completo (roteiro completo em `quickstart.md` § US4).
 
 ### Implementation for User Story 4
 
-- [ ] T039 [P] [US4] Redigir o texto da tela de Transparência (o que o app faz/não faz, mesmo
+- [X] T039 [P] [US4] Redigir o texto da tela de Transparência (o que o app faz/não faz, mesmo
       recorte de `spec.md` § User Story 4) e o link para a política de privacidade completa
 - [X] T040 [US4] Implementar `SettingsViewModel` (expõe provedor DNS atual + texto de
       privacidade) em `app/src/main/java/io/blindado/android/ui/settings/SettingsViewModel.kt`
