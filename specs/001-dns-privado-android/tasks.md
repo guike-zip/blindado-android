@@ -276,7 +276,12 @@ fabricantes diferentes (Samsung, Xiaomi etc. costumam ter gerenciamento de bater
 que o AOSP/emulador) — T042/T046 continuam abertas até validação em aparelho físico.
 
 - [ ] T042 Rodar a validação completa de `quickstart.md` (todas as 4 histórias) em pelo menos
-      um dispositivo Android físico
+      um dispositivo Android físico. **PRIORIDADE**: confirmar primeiro que a tela "Testar"
+      diferencia corretamente domínios bloqueados de acessíveis — `research.md` #7 documenta que
+      no emulador (AVD `movase_test`) a resolução DNS falha para os 4 domínios de teste
+      (incluindo `example.com`, que deveria ser "Acessível"), provável limitação do emulador
+      (não confirmada como bug real), mas isso significa que o bloqueio de domínios — a função
+      central do app — segue **não verificado** até este teste em hardware real
 - [X] T043 [P] Auditoria de acessibilidade TalkBack em todas as telas (rótulos descritivos,
       fator de escala de fonte do sistema respeitado — Princípio VI) — validado em emulador via
       `uiautomator dump` (árvore de acessibilidade real, não inspeção de código): escudo de

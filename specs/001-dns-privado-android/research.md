@@ -127,3 +127,47 @@ por suportar DoH padrão RFC 8484 compatível com a decisão #4.
 
 **Fontes**: [AdGuard DNS Knowledge Base — Known DNS Providers](https://adguard-dns.io/kb/general/dns-providers/),
 [Control D — Free DNS Resolvers](https://docs.controld.com/docs/free-dns).
+
+## #7 — ACHADO CRÍTICO (2026-09-24): resolução DNS falha 100% no emulador — bloqueia T042/T046
+
+**O que foi observado**: ao preparar screenshots para a Play Store no emulador (AVD `movase_test`,
+Android 14), a tela "Testar" reportou **todos** os 4 domínios de teste como "Bloqueado" —
+incluindo `example.com`, que não está na blocklist e deveria aparecer como "Acessível". Investigação
+com logging temporário (revertido, nunca commitado) confirmou:
+
+- Nenhum pacote IPv4/UDP:53 chega ao `input.read()` da `BlindadoVpnService` — só ruído IPv6
+  link-local (Neighbor Discovery, `fe80::...`) não relacionado a DNS.
+- `InetAddress.getByName()` falha instantaneamente (< 100ms) para os 4 domínios, tanto a partir do
+  próprio processo do Blindado quanto de um processo totalmente diferente (`adb shell`, UID 2000) —
+  descarta a hipótese de auto-exclusão do app dono da VPN.
+- `ping 10.0.0.2` (o próprio endereço que `Builder.addAddress()` atribui à interface TUN) responde
+  com RTT ~0.06–0.2ms — rápido demais para um round-trip real via o código Kotlin do app (que nem
+  implementa ICMP). Isso sugere que o próprio kernel/emulador responde localmente a tráfego
+  destinado ao endereço da interface, sem nunca entregá-lo ao file descriptor da TUN para o app
+  processar — ou seja, o mecanismo `addAddress("10.0.0.2") + addDnsServer("10.0.0.2")` (o mesmo
+  endereço para os dois) pode não estar sendo roteado para o processo userspace da forma esperada
+  **neste emulador especificamente**.
+
+**Por que a hipótese mais provável é "limitação do emulador", não bug real do app**: esse padrão
+(mesmo endereço para a interface e para o DNS) é exatamente o documentado na decisão #3 acima e é o
+usado por apps de código aberto reais e amplamente usados em produção (DNS66, Intra,
+PersonalDNSFilter) — se o padrão não funcionasse de forma alguma em Android real, esses apps não
+funcionariam. A Constituição (Princípio VI) já registra que `VpnService` "não funciona de forma
+confiável em emulador" — este achado é a primeira evidência concreta e específica desse limite,
+não apenas a advertência genérica que já existia.
+
+**Por que isso NÃO deve ser tratado como resolvido sem dispositivo físico**: a hipótese acima é
+plausível, mas não foi provada — continua sendo possível (embora menos provável) que haja um bug
+real no roteamento configurado por `BlindadoVpnService.connect()`. T042 e T046 já exigiam
+dispositivo físico por outros motivos; este achado eleva a prioridade e o escopo de T042
+especificamente: a primeira coisa a verificar em dispositivo físico real é se a tela "Testar"
+diferencia corretamente domínios bloqueados de acessíveis (não só se a VPN "conecta" visualmente).
+Enquanto isso não for confirmado em hardware real, a funcionalidade central do app (bloqueio de
+domínios) deve ser tratada como **não verificada**, apesar da UI/fluxo de permissão funcionarem.
+
+**Ação tomada nesta sessão**: nenhuma mudança de código foi feita (o logging de diagnóstico foi
+revertido) — não há evidência suficiente para justificar uma mudança na arquitetura de
+`Builder.addAddress()`/`addDnsServer()` sem antes confirmar em hardware real se o problema
+realmente existe fora do emulador. Os screenshots da Play Store da tela "Testar" foram
+propositalmente **não capturados** nesta sessão para evitar publicar um resultado que pode estar
+incorreto.
