@@ -1,0 +1,7 @@
+# https://docs.fastlane.tools/advanced/#appfile
+#
+# Nenhum valor real de conta/credencial está aqui de propósito. A chave de conta de serviço
+# fica em keystore/play-fastlane-supply.json (gitignored) — ver README-SETUP.md.
+
+json_key_file("keystore/play-fastlane-supply.json")
+package_name("io.blindado.android")

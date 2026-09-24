@@ -1,0 +1,30 @@
+# https://docs.fastlane.tools
+#
+# Uso: `bundle exec fastlane android internal_test` — sempre via `bundle exec` (Gemfile fixa a
+# versão do fastlane; nunca rode `fastlane` instalado global).
+#
+# GATE: a lane `internal_test` exige a chave de conta de serviço em
+# keystore/play-fastlane-supply.json (gitignored) — ver keystore/README.md.
+
+default_platform(:android)
+
+platform :android do
+  desc "Gera o Android App Bundle de release assinado"
+  lane :build_release do
+    gradle(task: "bundleRelease")
+  end
+
+  desc "Builda e envia a versão mais recente para a faixa de Testes Internos do Play Console — nunca para produção (essa lane não tem opção de faixa configurável de propósito)."
+  lane :internal_test do
+    build_release
+    upload_to_play_store(
+      track: "internal",
+      aab: "app/build/outputs/bundle/release/app-release.aab",
+      skip_upload_apk: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: "completed",
+    )
+  end
+end

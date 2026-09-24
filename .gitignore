@@ -23,3 +23,9 @@ local.properties
 # Keystore signing config e credenciais de API — nunca commitar chave/senha reais
 keystore.properties
 /keystore/
+vendor/bundle/
+.bundle/
+
+# Artefatos gerados pelo fastlane
+fastlane/report.xml
+fastlane/README.md
