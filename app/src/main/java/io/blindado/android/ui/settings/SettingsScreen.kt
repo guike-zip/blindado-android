@@ -54,9 +54,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier) 
 
         TextButton(
             onClick = {
-                // TODO(T039): substituir pelo link real da política de privacidade publicada,
-                // mesma dinâmica do app irmão de iOS (GitHub Pages ou equivalente).
-                uriHandler.openUri("https://example.com/blindado-privacidade")
+                uriHandler.openUri("https://guike-zip.github.io/blindado-android/design/privacidade.html")
             },
             modifier = Modifier.semantics { contentDescription = "Ler a política de privacidade completa" },
         ) {

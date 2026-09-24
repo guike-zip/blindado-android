@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blindado — Política de Privacidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-canvas:#0B0F14;
+  --bg-surface:#181C22;
+  --text-primary:#F7F8FA;
+  --text-secondary:#ACB1B9;
+  --text-tertiary:#8E939A;
+  --accent:#56DC85;
+  --font-display:"Space Grotesk",system-ui,sans-serif;
+  --font-ui:Roboto,-apple-system,BlinkMacSystemFont,"Helvetica Neue",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"Roboto Mono",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-canvas);color:var(--text-primary);
+  font-family:var(--font-ui);-webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:72px 24px 96px}
+h1{font:700 40px/1.15 var(--font-display);letter-spacing:-.02em;margin:0 0 8px}
+.updated{font:400 13px/1 var(--font-mono);color:var(--text-tertiary);margin:0 0 48px}
+h2{font:600 22px/1.3 var(--font-display);margin:48px 0 16px;color:var(--text-primary)}
+p{font:400 16px/1.7 var(--font-ui);color:var(--text-secondary);margin:0 0 16px}
+ul{margin:0 0 16px;padding-left:22px}
+li{font:400 16px/1.7 var(--font-ui);color:var(--text-secondary);margin-bottom:8px}
+strong{color:var(--text-primary);font-weight:600}
+.card{background:var(--bg-surface);border-radius:16px;padding:24px 28px;margin:24px 0}
+.accent{color:var(--accent)}
+a{color:var(--accent)}
+.back{display:inline-block;margin-top:56px;font:400 14px/1 var(--font-ui);color:var(--text-tertiary);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Política de Privacidade do <span class="accent">Blindado</span></h1>
+  <p class="updated">Última atualização: 24 de setembro de 2026</p>
+
+  <div class="card">
+    <p style="margin:0"><strong>Resumo em uma frase:</strong> o Blindado não coleta, não
+    transmite e não armazena nenhum dado seu em servidor próprio — porque não existe servidor
+    próprio. Não há backend.</p>
+  </div>
+
+  <h2>O que o Blindado faz</h2>
+  <p>O Blindado é um app pago de download único para Android que configura DNS criptografado
+  (DNS-over-HTTPS) em todo o sistema — Wi-Fi e dados móveis — usando uma <code>VpnService</code>
+  100% local, sem servidor remoto do Blindado. Como essa VPN local se registra como o resolvedor
+  de DNS do próprio aparelho, o bloqueio de domínios conhecidos de anúncios e rastreadores vale
+  para <strong>qualquer app instalado</strong>, não só um navegador.</p>
+
+  <h2>Dados que coletamos</h2>
+  <p><strong>Nenhum.</strong> O Blindado não pede cadastro, não usa conta, não tem SDK de
+  análise (analytics) nem de anúncios, e não envia telemetria de nenhum tipo para nós ou para
+  qualquer terceiro que não seja o provedor de DNS que você escolher.</p>
+
+  <h2>Para onde vão suas consultas DNS</h2>
+  <p>Para que seu Android encontre um site ou servidor, ele precisa fazer uma pergunta chamada
+  consulta DNS. O Blindado intercepta essa pergunta localmente, no próprio aparelho, e a envia
+  criptografada direto para o provedor de DNS que você escolher:</p>
+  <ul>
+    <li><strong>AdGuard DNS</strong> — <a href="https://adguard-dns.io/en/privacy.html">política de privacidade do AdGuard DNS</a></li>
+    <li><strong>Control D</strong> — <a href="https://controld.com/privacy">política de privacidade do Control D</a></li>
+    <li>Ou um <strong>servidor DoH personalizado</strong> que você mesmo informar, no nível
+    Personalizado — nesse caso, a política de privacidade de quem opera esse servidor é a que
+    vale.</li>
+  </ul>
+  <p>Quem responde essas consultas é o provedor escolhido, não o Blindado. Isso é inerente ao
+  funcionamento de qualquer configuração de DNS e não constitui coleta de dados pelo Blindado.</p>
+
+  <h2>Sobre a permissão de VPN</h2>
+  <p>O Android exige que qualquer app que intercepte tráfego de rede peça a permissão de VPN do
+  sistema — é a mesma permissão usada por apps de VPN completos. O Blindado usa essa permissão
+  apenas para registrar um resolvedor de DNS local (<code>VpnService.Builder.addDnsServer()</code>),
+  com a rota limitada só a esse endereço local. O restante do seu tráfego (todo o resto do que os
+  outros apps fazem na rede) nunca entra nessa VPN nem passa pelo Blindado — o sistema operacional
+  só encaminha ao Blindado o que é, de fato, uma consulta DNS.</p>
+
+  <h2>Tela "Testar"</h2>
+  <p>A funcionalidade de teste faz requisições a uma lista fixa de domínios conhecidos (de
+  anúncio/rastreamento e de controle) apenas para mostrar a você, localmente, se a proteção
+  está bloqueando o que deveria. Nenhum resultado desses testes é enviado a servidor algum —
+  o resultado só existe na tela do seu aparelho, na hora em que você roda o teste.</p>
+
+  <h2>O que o Blindado NÃO faz</h2>
+  <ul>
+    <li>Não é uma VPN de anonimização — não esconde seu IP nem troca sua localização. A
+    permissão de VPN do Android é usada só para registrar o resolvedor de DNS local, como
+    explicado acima.</li>
+    <li>Não bloqueia conteúdo dentro de vídeos ou anúncios que não dependem de um domínio
+    bloqueável (ex.: anúncios servidos pelo mesmo domínio do próprio app/site).</li>
+    <li>Não guarda histórico nem estatísticas de navegação, nem para você, nem para nós.</li>
+    <li>Não usa cookies, pixels de rastreamento, identificadores de publicidade ou qualquer
+    SDK de terceiros.</li>
+  </ul>
+
+  <h2>Crianças</h2>
+  <p>O Blindado não é direcionado a crianças e não coleta, intencionalmente ou não, dados de
+  nenhum usuário — inclusive menores de idade — pelas razões já descritas acima.</p>
+
+  <h2>Alterações a esta política</h2>
+  <p>Se esta política mudar, a nova versão será publicada nesta mesma página com a data de
+  atualização revisada no topo. O uso do Blindado sempre foi, e continuará sendo, sem coleta
+  de dados própria — mudanças aqui tendem a ser apenas de redação ou de provedores de DNS
+  listados.</p>
+
+  <h2>Contato</h2>
+  <p>Dúvidas sobre esta política podem ser enviadas para
+  <a href="mailto:guilherme.avieiras@gmail.com">guilherme.avieiras@gmail.com</a>.</p>
+
+  <a class="back" href="https://github.com/guike-zip/blindado-android">← Blindado</a>
+</div>
+</body>
+</html>
