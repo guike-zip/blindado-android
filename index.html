@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blindado para Android — Acesso antecipado</title>
-<meta name="description" content="DNS privado e bloqueio de anúncios/rastreadores em todo o Android, sem VPN de tráfego. Entre na lista de espera do acesso antecipado.">
+<title>Blindado — DNS privado para iPhone, Mac e Android</title>
+<meta name="description" content="DNS privado e bloqueio de anúncios/rastreadores para iPhone, Mac e Android, sem VPN de tráfego. Entre na lista de espera do acesso antecipado.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@ header{padding:28px 0}
 .brand-mark{width:28px;height:28px;flex-shrink:0}
 
 /* Hero */
-.hero{padding:56px 0 40px;text-align:center}
+.hero{padding-top:56px;padding-bottom:40px;text-align:center}
 .eyebrow{display:inline-block;font:500 13px/1 var(--font-mono);letter-spacing:.04em;color:var(--accent);
   background:var(--accent-dim);padding:8px 14px;border-radius:999px;margin-bottom:24px}
 h1{font:700 clamp(32px,6vw,52px)/1.15 var(--font-display);letter-spacing:-.02em;margin:0 0 20px;max-width:760px;margin-left:auto;margin-right:auto}
@@ -53,10 +53,11 @@ h1 .accent{color:var(--accent)}
 .hero-note{margin-top:16px;font:400 13px/1.5 var(--font-mono);color:var(--text-tertiary)}
 
 /* Screenshots strip */
-.shots{display:flex;justify-content:center;gap:20px;padding:16px 0 72px;overflow-x:auto}
+.shots{display:flex;justify-content:center;gap:20px;padding-top:16px;padding-bottom:72px;overflow-x:auto}
 .shot{flex:0 0 auto;width:180px;border-radius:20px;overflow:hidden;border:1px solid var(--border);
   box-shadow:0 24px 60px -20px rgba(0,0,0,.6)}
 .shot:nth-child(2){transform:translateY(-16px)}
+.shots-caption{text-align:center;font:400 13px/1.5 var(--font-mono);color:var(--text-tertiary);margin:-40px 0 0}
 
 /* Sections */
 section{padding:64px 0}
@@ -122,15 +123,15 @@ footer .brand{font-size:16px}
 
 <main>
   <div class="hero wrap">
-    <span class="eyebrow">EM DESENVOLVIMENTO — ANDROID</span>
-    <h1>DNS privado e bloqueio de anúncios <span class="accent">em todo o Android</span>, não só num navegador</h1>
-    <p class="lede">O Blindado protege seu Android com DNS criptografado em Wi-Fi e dados móveis, e bloqueia
-    anúncios e rastreadores conhecidos em qualquer app — via uma VPN 100% local, sem servidor próprio.</p>
-    <div class="cta-row">
-      <a href="#acesso-antecipado" class="btn btn-primary">Entrar na lista de espera</a>
+    <span class="eyebrow">EM DESENVOLVIMENTO — iOS, MAC E ANDROID</span>
+    <h1>DNS privado e bloqueio de anúncios <span class="accent">para iPhone, Mac e Android</span></h1>
+    <p class="lede">O Blindado protege sua navegação com DNS criptografado em Wi-Fi e dados móveis, e bloqueia
+    anúncios e rastreadores conhecidos — via um túnel 100% local, sem servidor próprio do Blindado.</p>
+    <div class="cta-row" id="download-row">
+      <a href="#acesso-antecipado" class="btn btn-primary" id="btn-primary-download">Entrar na lista de espera</a>
       <a href="design/privacidade.html" class="btn btn-ghost">Ler a política de privacidade</a>
     </div>
-    <p class="hero-note">Sem cadastro pago ainda. Avisamos por e-mail assim que abrir.</p>
+    <p class="hero-note" id="hero-note">Sem cadastro pago ainda. Avisamos por e-mail assim que abrir na sua loja de apps.</p>
   </div>
 
   <div class="shots wrap">
@@ -138,19 +139,22 @@ footer .brand{font-size:16px}
     <img class="shot" src="design/screenshots/02-nivel-protecao.png" alt="Tela de escolha do nível de proteção: Padrão, Família ou Personalizado">
     <img class="shot" src="design/screenshots/03-ajustes.png" alt="Tela de ajustes com o texto de transparência e privacidade">
   </div>
+  <p class="shots-caption wrap">Capturas do app Android, em testes internos. A versão para iPhone e Mac está em revisão na App Store.</p>
 
   <section>
     <div class="wrap">
       <div class="section-head">
         <h2>Proteção de verdade, no lugar certo</h2>
-        <p>Diferente de um bloqueador de navegador, o Blindado atua na camada de DNS — então vale para
-        qualquer app do seu Android.</p>
+        <p>O Blindado atua na camada de DNS do sistema — no Android, isso significa bloqueio em qualquer
+        app; no iPhone e Mac, DNS privado no sistema inteiro mais um bloqueador dedicado ao Safari.</p>
       </div>
       <div class="grid">
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#56DC85" stroke-width="2"><path d="M12 2 20 6v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg></div>
-          <h3>Bloqueio em qualquer app</h3>
-          <p>O bloqueio acontece na camada de DNS de uma VPN local — vale para todos os apps, não só um navegador.</p>
+          <h3>Bloqueio em qualquer app (Android)</h3>
+          <p>No Android, o bloqueio acontece na camada de DNS de uma VPN local — vale para todos os apps,
+          não só um navegador. No iPhone/Mac, o DNS privado protege o sistema inteiro e um bloqueador de
+          conteúdo dedicado cuida do Safari.</p>
         </div>
         <div class="card">
           <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="#56DC85" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
@@ -179,7 +183,7 @@ footer .brand{font-size:16px}
       </div>
       <div class="not-list">
         <ul>
-          <li><span><strong>Não é uma VPN de anonimização</strong> — não esconde seu IP nem troca sua localização. A permissão de VPN do Android é usada só para registrar o resolvedor de DNS local.</span></li>
+          <li><span><strong>Não é uma VPN de anonimização</strong> — não esconde seu IP nem troca sua localização. No Android, a permissão de VPN é usada só para registrar o resolvedor de DNS local; no iPhone/Mac, é a API nativa de configuração de DNS da Apple.</span></li>
           <li><span><strong>Não bloqueia conteúdo dentro de vídeos/anúncios</strong> que não dependem de um domínio bloqueável.</span></li>
           <li><span><strong>Não guarda histórico nem estatísticas</strong> de navegação — nem para você, nem para nós.</span></li>
         </ul>
@@ -191,7 +195,8 @@ footer .brand{font-size:16px}
     <div class="wrap">
       <div class="section-head">
         <h2>Seja um dos primeiros a testar</h2>
-        <p>Deixe seu e-mail e avisamos assim que o Blindado para Android estiver disponível para todo mundo.</p>
+        <p>Deixe seu e-mail, diga qual plataforma você usa, e avisamos assim que o Blindado estiver
+        disponível na sua loja de apps.</p>
       </div>
       <div class="form-card">
         <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7qlWbgGboHHJbhIgHH770x9WccINdztR_8EwuMDdm49x9QA/viewform?embedded=true" title="Formulário de acesso antecipado do Blindado">Carregando…</iframe>
@@ -211,5 +216,40 @@ footer .brand{font-size:16px}
   </div>
 </footer>
 
+<script>
+// Links das lojas — trocar de null para a URL real assim que cada revisão for aprovada.
+// Enquanto null, o botão principal leva para a lista de espera (#acesso-antecipado).
+var STORE_LINKS = {
+  ios: null,    // ex.: "https://apps.apple.com/app/idXXXXXXXXX"
+  macos: null,  // ex.: "https://apps.apple.com/app/idXXXXXXXXX"
+  android: null // ex.: "https://play.google.com/store/apps/details?id=io.blindado.android"
+};
+
+(function () {
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPhone|iPad|iPod/.test(ua);
+  var isMac = /Macintosh/.test(ua) && !isIOS;
+  var isAndroid = /Android/.test(ua);
+
+  var platform = isIOS ? "ios" : isMac ? "macos" : isAndroid ? "android" : null;
+  var storeLabel = isIOS ? "Baixar na App Store" : isMac ? "Baixar na Mac App Store" : isAndroid ? "Baixar no Google Play" : null;
+
+  if (!platform) return; // desktop não-Mac (ex. Windows/Linux) fica com "Entrar na lista de espera"
+
+  var link = STORE_LINKS[platform];
+  var btn = document.getElementById("btn-primary-download");
+  var note = document.getElementById("hero-note");
+
+  if (link) {
+    btn.href = link;
+    btn.textContent = storeLabel;
+    btn.removeAttribute("id");
+    note.textContent = "Já disponível — toque para instalar.";
+  } else {
+    note.textContent = "Detectamos " + (isIOS ? "iPhone" : isMac ? "Mac" : "Android") +
+      " — ainda em revisão na loja. Entre na lista de espera para ser avisado primeiro.";
+  }
+})();
+</script>
 </body>
 </html>
