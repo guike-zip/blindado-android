@@ -108,11 +108,11 @@ remover a proteção pelo app e confirmar volta a "Não configurado" (roteiro co
 
 ### Tests for User Story 1
 
-- [ ] T015 [P] [US1] Teste unitário de `HomeViewModel` cobrindo as 5 transições de
+- [X] T015 [P] [US1] Teste unitário de `HomeViewModel` cobrindo as 5 transições de
       `data-model.md` § ProtectionState (incluindo `Erro(PERMISSAO_REVOGADA)` forçado via
       `FakeProtectionManaging`) em
       `app/src/test/java/io/blindado/android/ui/home/HomeViewModelTest.kt`
-- [ ] T016 [P] [US1] Teste unitário confirmando que uma falha de `install()` sempre carrega um
+- [X] T016 [P] [US1] Teste unitário confirmando que uma falha de `install()` sempre carrega um
       `ErrorReason` real (nunca um motivo inventado — FR-005) em
       `app/src/test/java/io/blindado/android/protection/ProtectionManagingContractTest.kt`
 
@@ -173,7 +173,7 @@ salvar (roteiro completo em `quickstart.md` § US2).
 
 ### Tests for User Story 2
 
-- [ ] T028 [P] [US2] Teste unitário de `ProtectionLevelViewModel` cobrindo troca de nível,
+- [X] T028 [P] [US2] Teste unitário de `ProtectionLevelViewModel` cobrindo troca de nível,
       troca de provedor dentro do nível, e validação de URL personalizada (válida/inválida) em
       `app/src/test/java/io/blindado/android/ui/level/ProtectionLevelViewModelTest.kt`
 
@@ -208,7 +208,7 @@ resultado é sempre "Indeterminado" (roteiro completo em `quickstart.md` § US3)
 
 ### Tests for User Story 3
 
-- [ ] T033 [P] [US3] Teste unitário de `TestViewModel`: `OverallResult.INDETERMINADO` sem rede
+- [X] T033 [P] [US3] Teste unitário de `TestViewModel`: `OverallResult.INDETERMINADO` sem rede
       (FR-012), `PROTEGIDO`/`DESPROTEGIDO` conforme `FakeProtectionManaging` em
       `app/src/test/java/io/blindado/android/ui/test/TestViewModelTest.kt`
 
@@ -239,7 +239,7 @@ o conteúdo completo (roteiro completo em `quickstart.md` § US4).
 
 ### Tests for User Story 4
 
-- [ ] T038 [P] [US4] Teste unitário de `SettingsViewModel`: nome do provedor atual exibido bate
+- [X] T038 [P] [US4] Teste unitário de `SettingsViewModel`: nome do provedor atual exibido bate
       com o `ProtectionProfile` persistido em
       `app/src/test/java/io/blindado/android/ui/settings/SettingsViewModelTest.kt`
 

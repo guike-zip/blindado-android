@@ -58,7 +58,14 @@ class MainActivity : ComponentActivity() {
         viewModelFactory { initializer { ProtectionLevelViewModel(protectionManaging, profileStore) } }
     }
     private val testViewModel by viewModels<TestViewModel> {
-        viewModelFactory { initializer { TestViewModel(applicationContext) } }
+        viewModelFactory {
+            initializer {
+                TestViewModel(
+                    connectivityChecking = io.blindado.android.protection.NetworkStatus(applicationContext),
+                    domainResolving = io.blindado.android.protection.SystemDomainResolving(),
+                )
+            }
+        }
     }
     private val settingsViewModel by viewModels<SettingsViewModel> {
         viewModelFactory { initializer { SettingsViewModel(profileStore) } }

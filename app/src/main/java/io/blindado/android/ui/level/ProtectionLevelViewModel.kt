@@ -2,7 +2,7 @@ package io.blindado.android.ui.level
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.blindado.android.data.ProtectionProfileStore
+import io.blindado.android.data.ProfileStoring
 import io.blindado.android.domain.DnsProvider
 import io.blindado.android.domain.ProtectionLevel
 import io.blindado.android.domain.ProtectionProfile
@@ -18,19 +18,18 @@ import kotlinx.coroutines.launch
 /** ViewModel da User Story 2 — Escolher o nível de proteção. */
 class ProtectionLevelViewModel(
     private val protectionManaging: ProtectionManaging,
-    private val profileStore: ProtectionProfileStore,
+    private val profileStore: ProfileStoring,
+    private val urlValidator: DohUrlValidator = DohUrlValidator(),
 ) : ViewModel() {
 
     val profile: StateFlow<ProtectionProfile> = profileStore.profile.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
+        started = SharingStarted.Eagerly,
         initialValue = ProtectionProfile.default(ProviderCatalog.ADGUARD_PADRAO.id),
     )
 
     private val _customUrlError = MutableStateFlow<String?>(null)
     val customUrlError: StateFlow<String?> = _customUrlError
-
-    private val urlValidator = DohUrlValidator()
 
     fun providersFor(level: ProtectionLevel): List<DnsProvider> = ProviderCatalog.providersFor(level)
 

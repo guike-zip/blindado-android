@@ -19,21 +19,21 @@ private val Context.protectionProfileDataStore: DataStore<Preferences> by prefer
 class ProtectionProfileStore(
     private val context: Context,
     private val defaultProviderId: String,
-) {
+) : ProfileStoring {
     private object Keys {
         val LEVEL = stringPreferencesKey("level")
         val PROVIDER_ID = stringPreferencesKey("provider_id")
         val CUSTOM_DOH_URL = stringPreferencesKey("custom_doh_url")
     }
 
-    val profile: Flow<ProtectionProfile> = context.protectionProfileDataStore.data.map { prefs ->
+    override val profile: Flow<ProtectionProfile> = context.protectionProfileDataStore.data.map { prefs ->
         val level = prefs[Keys.LEVEL]?.let { ProtectionLevel.valueOf(it) } ?: ProtectionLevel.PADRAO
         val providerId = prefs[Keys.PROVIDER_ID] ?: defaultProviderId
         val customUrl = prefs[Keys.CUSTOM_DOH_URL]
         ProtectionProfile(level = level, providerId = providerId, customDohUrl = customUrl)
     }
 
-    suspend fun save(profile: ProtectionProfile) {
+    override suspend fun save(profile: ProtectionProfile) {
         context.protectionProfileDataStore.edit { prefs ->
             prefs[Keys.LEVEL] = profile.level.name
             prefs[Keys.PROVIDER_ID] = profile.providerId

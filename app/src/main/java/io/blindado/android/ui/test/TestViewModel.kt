@@ -1,26 +1,23 @@
 package io.blindado.android.ui.test
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.blindado.android.domain.DomainCheck
 import io.blindado.android.domain.DomainStatus
 import io.blindado.android.domain.OverallResult
 import io.blindado.android.domain.TestResult
-import io.blindado.android.protection.NetworkStatus
+import io.blindado.android.protection.ConnectivityChecking
+import io.blindado.android.protection.DomainResolving
 import io.blindado.android.protection.TestDomains
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.InetAddress
-import java.net.UnknownHostException
 
 /** ViewModel da User Story 3 — Testar a proteção. */
-class TestViewModel(context: Context) : ViewModel() {
-
-    private val networkStatus = NetworkStatus(context.applicationContext)
+class TestViewModel(
+    private val connectivityChecking: ConnectivityChecking,
+    private val domainResolving: DomainResolving,
+) : ViewModel() {
 
     private val _result = MutableStateFlow<TestResult?>(null)
     val result: StateFlow<TestResult?> = _result
@@ -32,7 +29,7 @@ class TestViewModel(context: Context) : ViewModel() {
         viewModelScope.launch {
             _isRunning.value = true
 
-            if (!networkStatus.hasActiveConnection()) {
+            if (!connectivityChecking.hasActiveConnection()) {
                 // FR-012: sem rede real, o resultado é sempre Indeterminado — nunca
                 // Protegido nem Desprotegido.
                 _result.value = TestResult(
@@ -47,7 +44,8 @@ class TestViewModel(context: Context) : ViewModel() {
 
             val items = mutableListOf<DomainCheck>()
             for (testDomain in TestDomains.ALL) {
-                val status = checkDomain(testDomain.domain)
+                val reachable = domainResolving.isReachable(testDomain.domain)
+                val status = if (reachable) DomainStatus.ACESSIVEL else DomainStatus.BLOQUEADO
                 items.add(DomainCheck(testDomain.domain, testDomain.category, status))
                 _result.value = TestResult(items.toList(), overall = OverallResult.INDETERMINADO)
             }
@@ -64,15 +62,6 @@ class TestViewModel(context: Context) : ViewModel() {
 
             _result.value = TestResult(items, overall)
             _isRunning.value = false
-        }
-    }
-
-    private suspend fun checkDomain(domain: String): DomainStatus = withContext(Dispatchers.IO) {
-        try {
-            InetAddress.getByName(domain)
-            DomainStatus.ACESSIVEL
-        } catch (e: UnknownHostException) {
-            DomainStatus.BLOQUEADO
         }
     }
 }

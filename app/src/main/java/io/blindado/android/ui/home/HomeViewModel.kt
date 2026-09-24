@@ -3,7 +3,7 @@ package io.blindado.android.ui.home
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.blindado.android.data.ProtectionProfileStore
+import io.blindado.android.data.ProfileStoring
 import io.blindado.android.domain.ErrorReason
 import io.blindado.android.domain.ProtectionState
 import io.blindado.android.protection.ProtectionException
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
  */
 class HomeViewModel(
     private val protectionManaging: ProtectionManaging,
-    private val profileStore: ProtectionProfileStore,
+    private val profileStore: ProfileStoring,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ProtectionState>(ProtectionState.NaoConfigurado)

@@ -5,15 +5,19 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-/** Valida uma URL DoH personalizada (HTTPS + alcançável) antes de salvar (FR-007). */
-class DohUrlValidator {
+/**
+ * Valida uma URL DoH personalizada (HTTPS + alcançável) antes de salvar (FR-007). `open` só para
+ * permitir uma fake de teste que não depende de rede real (Constituição, Princípio V) —
+ * `validate` faz uma checagem de rede de verdade, não deve rodar em teste unitário comum.
+ */
+open class DohUrlValidator {
 
     sealed interface Result {
         data object Valid : Result
         data class Invalid(val reason: String) : Result
     }
 
-    suspend fun validate(url: String): Result = withContext(Dispatchers.IO) {
+    open suspend fun validate(url: String): Result = withContext(Dispatchers.IO) {
         if (!url.startsWith("https://")) {
             return@withContext Result.Invalid("O endereço precisa começar com https://")
         }
