@@ -5,7 +5,7 @@ Blindado protege seu Android com DNS criptografado em todo o sistema — Wi-Fi e
 • Teste sua proteção a qualquer momento e veja exatamente o que está sendo bloqueado.
 • Bloqueio system-wide de verdade: como a proteção atua na camada de DNS de uma VPN local, o bloqueio vale para qualquer app — não só um navegador.
 • Zero coleta de dados. Zero servidor próprio do Blindado. Suas consultas DNS vão diretamente, e criptografadas, para o provedor que você escolher.
-• Pagamento único. Sem assinatura, sem compras dentro do app: tudo que o Blindado faz já vem liberado no preço da compra.
+• Sem assinatura, sem compras dentro do app: tudo que o Blindado faz já vem liberado, sem recurso premium trancado atrás de pagamento extra.
 
 O QUE O BLINDADO NÃO FAZ
 (para você instalar sabendo exatamente o que está levando)
