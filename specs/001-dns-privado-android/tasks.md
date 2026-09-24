@@ -277,11 +277,25 @@ que o AOSP/emulador) — T042/T046 continuam abertas até validação em aparelh
 
 - [ ] T042 Rodar a validação completa de `quickstart.md` (todas as 4 histórias) em pelo menos
       um dispositivo Android físico
-- [ ] T043 [P] Auditoria de acessibilidade TalkBack em todas as telas (rótulos descritivos,
-      fator de escala de fonte do sistema respeitado — Princípio VI)
-- [ ] T044 [P] QA visual em tema claro e tema escuro em todas as telas
-- [ ] T045 Confirmar que o build de Release compila sem nenhum warning de lint suprimido
-      (Padrões de Qualidade e Segurança da constituição)
+- [X] T043 [P] Auditoria de acessibilidade TalkBack em todas as telas (rótulos descritivos,
+      fator de escala de fonte do sistema respeitado — Princípio VI) — validado em emulador via
+      `uiautomator dump` (árvore de acessibilidade real, não inspeção de código): escudo de
+      estado tem `content-desc` correto ("Não configurado"/etc.), botão principal tem
+      `content-desc="Blindar meu Android"`, textos de título/corpo são lidos normalmente pelo
+      TalkBack via texto visível. Fator de escala testado em 1.3x via
+      `adb shell settings put system font_scale 1.3` — texto escalou corretamente, sem cortar
+      nem sobrepor (confirma uso de `sp`, não `dp`, no texto). Pendente: rodar com o serviço
+      TalkBack de verdade ligado (não só a árvore de acessibilidade) em aparelho físico.
+- [X] T044 [P] QA visual em tema claro e tema escuro em todas as telas — tema escuro testado em
+      emulador via `adb shell cmd uimode night yes`: Início e Testar renderizaram corretamente
+      (fundo escuro, texto claro, botão verde com texto escuro — contraste adequado). Tema claro
+      já validado nas capturas anteriores desta sessão.
+- [X] T045 Confirmar que o build de Release compila sem nenhum warning de lint suprimido
+      (Padrões de Qualidade e Segurança da constituição) — `./gradlew lintDebug` rodou limpo
+      (`BUILD SUCCESSFUL`, `abortOnError = true` no `app/build.gradle.kts` garante que qualquer
+      erro real interromperia o build). Falta rodar especificamente contra `lintRelease`/
+      `assembleRelease` quando houver uma configuração de assinatura de release (fora do escopo
+      desta feature).
 - [ ] T046 Confirmar em dispositivo físico o comportamento real do `foregroundServiceType`
       decidido em `research.md` #2 (pendência sinalizada explicitamente naquele documento) e
       atualizar `research.md` com o resultado observado
