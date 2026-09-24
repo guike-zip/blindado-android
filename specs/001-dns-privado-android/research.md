@@ -171,3 +171,33 @@ revertido) — não há evidência suficiente para justificar uma mudança na ar
 realmente existe fora do emulador. Os screenshots da Play Store da tela "Testar" foram
 propositalmente **não capturados** nesta sessão para evitar publicar um resultado que pode estar
 incorreto.
+
+**Atualização (mesmo dia, investigação mais profunda)**: testada a hipótese de que usar o MESMO
+endereço para `addAddress()` e `addDnsServer()` (padrão documentado na decisão #3) faz o Android
+tratar consultas destinadas a esse IP como tráfego local, nunca entregue ao file descriptor da TUN.
+Corrigido experimentalmente para dois endereços distintos (`addAddress("10.0.0.1", 30)` +
+`addDnsServer("10.0.0.2")`), reconstruído, reinstalado e testado de novo. Resultado: **o problema
+persiste**. Confirmado via log direto do módulo `resolv` do sistema (não só logging do app):
+
+```
+res_nsend: used send_dg 0 terrno: 110       (110 = ETIMEDOUT)
+doQuery: rcode=255, ancount=0, return value=-110
+```
+
+O próprio resolvedor de DNS do Android tenta genuinamente enviar a consulta para `10.0.0.2` (não é
+uma falha "sem rota" imediata) e recebe timeout — mas **nenhuma linha de log do app** (`Log.d` no
+início do loop de pacotes, que dispara para qualquer pacote recebido) apareceu durante os ~20s de
+tentativas, mesmo capturando via `adb logcat` em stream contínuo para arquivo (não só `logcat -d`,
+que pode perder linhas por rotação de buffer). Ou seja: mesmo com endereços separados, o pacote
+UDP:53 nunca chega ao `input.read()` da `BlindadoVpnService` neste emulador. A mudança foi revertida
+(sem evidência de que ajudou, mantém a arquitetura documentada na decisão #3 sem alteração não
+verificada).
+
+**Conclusão revisada**: a causa raiz não está na escolha de endereço (mesmo endereço vs.
+endereços separados) — é mais provável que seja uma limitação mais profunda de como o backend de
+rede virtual deste emulador específico (AVD `movase_test`, imagem arm64, Android 14) entrega
+tráfego roteado a uma interface TUN pertencente a um app de terceiros. Isso não invalida a hipótese
+de "limitação do emulador" — só descarta a causa específica de endereço compartilhado como
+explicação completa. **T042 continua sendo o único caminho para confirmar se o bloqueio de domínio
+funciona de verdade** — nenhuma investigação adicional em emulador tem probabilidade alta de
+resolver essa incerteza; o próximo dado útil só vem de hardware físico real.
