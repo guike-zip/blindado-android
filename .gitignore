@@ -20,5 +20,6 @@ local.properties
 .idea/
 *.hprof
 
-# Keystore signing config — nunca commitar chave/senha de assinatura real
+# Keystore signing config e credenciais de API — nunca commitar chave/senha reais
 keystore.properties
+/keystore/
