@@ -1,0 +1,17 @@
+Blindado protege seu Android com DNS criptografado em todo o sistema — Wi-Fi e dados móveis — e bloqueia anúncios e rastreadores conhecidos em QUALQUER app instalado, não só num navegador.
+
+• Ative em poucos toques, direto no app: o Android pede sua permissão de VPN e a proteção liga na hora, sem sair do app nem configurar nada técnico.
+• Escolha entre proteção Padrão, Família (também filtra conteúdo adulto) ou um servidor DNS seguro personalizado — com mais de um provedor de DNS reconhecido disponível em cada nível (AdGuard DNS e Control D), para você não depender de um único serviço.
+• Teste sua proteção a qualquer momento e veja exatamente o que está sendo bloqueado.
+• Bloqueio system-wide de verdade: como a proteção atua na camada de DNS de uma VPN local, o bloqueio vale para qualquer app — não só um navegador.
+• Zero coleta de dados. Zero servidor próprio do Blindado. Suas consultas DNS vão diretamente, e criptografadas, para o provedor que você escolher.
+• Pagamento único. Sem assinatura, sem compras dentro do app: tudo que o Blindado faz já vem liberado no preço da compra.
+
+O QUE O BLINDADO NÃO FAZ
+(para você instalar sabendo exatamente o que está levando)
+
+• Não é uma VPN de anonimização — não esconde seu IP nem troca sua localização. A permissão de VPN do Android é usada só para registrar o resolvedor de DNS local do Blindado, nunca para rotear ou inspecionar seu tráfego.
+• Não bloqueia conteúdo dentro de vídeos ou anúncios que não dependem de um domínio bloqueável.
+• Não guarda histórico nem estatísticas de navegação — nem para você, nem para nós.
+
+O foco do Blindado é DNS privado e bloqueio de anúncios/rastreadores em todo o sistema — nada além disso.

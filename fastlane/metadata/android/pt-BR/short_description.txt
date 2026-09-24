@@ -1,0 +1,1 @@
+DNS privado e bloqueio de anúncios em todo o Android, sem servidor próprio.
