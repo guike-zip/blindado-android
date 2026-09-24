@@ -1,0 +1,36 @@
+# Lista inicial curada de domínios conhecidos de anúncios/rastreadores (research.md #5).
+# Um domínio por linha; bloqueio por sufixo (ver BlockList.isBlocked). Sem download remoto —
+# lista estática embutida no APK. Expandir/curar com mais cuidado antes do lançamento real.
+doubleclick.net
+googleadservices.com
+googlesyndication.com
+google-analytics.com
+googletagmanager.com
+googletagservices.com
+adservice.google.com
+adsafeprotected.com
+adnxs.com
+adform.net
+adsrvr.org
+criteo.com
+criteo.net
+taboola.com
+outbrain.com
+scorecardresearch.com
+facebook.net
+connect.facebook.net
+ads-twitter.com
+analytics.twitter.com
+amazon-adsystem.com
+moatads.com
+mopub.com
+appsflyer.com
+adjust.com
+branch.io
+flurry.com
+mixpanel.com
+segment.io
+segment.com
+hotjar.com
+crashlytics.com
+app-measurement.com

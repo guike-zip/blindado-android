@@ -33,16 +33,16 @@ Project Structure para o layout completo.
 
 **Purpose**: Inicialização do projeto Gradle/Android Studio
 
-- [ ] T001 Criar o módulo Gradle `app/` com pacote raiz `io.blindado.android`, conforme o layout
+- [X] T001 Criar o módulo Gradle `app/` com pacote raiz `io.blindado.android`, conforme o layout
       de `plan.md` → Project Structure
-- [ ] T002 Configurar `app/build.gradle.kts`: Compose BOM + Material 3, AndroidX
+- [X] T002 Configurar `app/build.gradle.kts`: Compose BOM + Material 3, AndroidX
       Lifecycle-ViewModel-Compose, AndroidX DataStore Preferences, Kotlin Coroutines;
       `minSdk = 26`, `targetSdk`/`compileSdk` na API estável mais recente disponível
       (`research.md` #1) — sem OkHttp/Retrofit nem nenhuma dependência de rede de terceiros
       (Princípio II)
-- [ ] T003 [P] Configurar lint (Android Lint + `ktlint` ou equivalente) para builds de Release
+- [X] T003 [P] Configurar lint (Android Lint + `ktlint` ou equivalente) para builds de Release
       sem warnings suprimidos (Padrões de Qualidade e Segurança da constituição)
-- [ ] T004 [P] Criar `AndroidManifest.xml` base com as permissões
+- [X] T004 [P] Criar `AndroidManifest.xml` base com as permissões
       `android.permission.INTERNET`, `android.permission.ACCESS_NETWORK_STATE`,
       `android.permission.FOREGROUND_SERVICE` (cada uma justificada por uma história de usuário
       ativa, per a constituição)
@@ -55,36 +55,36 @@ Project Structure para o layout completo.
 
 **⚠️ CRITICAL**: nenhuma história de usuário pode começar antes desta fase estar completa
 
-- [ ] T005 [P] Criar `ProtectionState` (sealed interface com `NaoConfigurado`/`Blindado`/
+- [X] T005 [P] Criar `ProtectionState` (sealed interface com `NaoConfigurado`/`Blindado`/
       `Erro(ErrorReason)`) e `ErrorReason` (`PERMISSAO_NEGADA`/`PERMISSAO_REVOGADA`/
       `FALHA_DESCONHECIDA`) em `app/src/main/java/io/blindado/android/domain/ProtectionState.kt`
       — exatamente como definido em `data-model.md` § ProtectionState, incluindo a state machine
       documentada lá
-- [ ] T006 [P] Criar `ProtectionLevel` (enum `PADRAO`/`FAMILIA`/`PERSONALIZADO`) em
+- [X] T006 [P] Criar `ProtectionLevel` (enum `PADRAO`/`FAMILIA`/`PERSONALIZADO`) em
       `app/src/main/java/io/blindado/android/domain/ProtectionLevel.kt`
-- [ ] T007 [P] Criar `DnsProvider` (data class `id`/`displayName`/`dohEndpoint`) em
+- [X] T007 [P] Criar `DnsProvider` (data class `id`/`displayName`/`dohEndpoint`) em
       `app/src/main/java/io/blindado/android/domain/DnsProvider.kt`
-- [ ] T008 [P] Criar `ProtectionProfile` (data class `level`/`providerId`/`customDohUrl`) em
+- [X] T008 [P] Criar `ProtectionProfile` (data class `level`/`providerId`/`customDohUrl`) em
       `app/src/main/java/io/blindado/android/domain/ProtectionProfile.kt` com a regra de
       `data-model.md`: quando `level == PERSONALIZADO`, `customDohUrl` DEVE ser uma URL HTTPS
       válida e alcançável antes de persistir (FR-007); valor padrão de primeira instalação é
       `ProtectionLevel.PADRAO` com o primeiro provedor suportado
-- [ ] T009 [P] Criar `TestResult`/`DomainCheck`/`DomainStatus`/`OverallResult` em
+- [X] T009 [P] Criar `TestResult`/`DomainCheck`/`DomainStatus`/`OverallResult` em
       `app/src/main/java/io/blindado/android/domain/TestResult.kt` — `OverallResult.INDETERMINADO`
       é obrigatório (nunca `PROTEGIDO`/`DESPROTEGIDO`) quando não há conectividade real (FR-012)
-- [ ] T010 Definir a interface `ProtectionManaging` e `ProtectionException(reason: ErrorReason,
+- [X] T010 Definir a interface `ProtectionManaging` e `ProtectionException(reason: ErrorReason,
       cause: Throwable?)` em `app/src/main/java/io/blindado/android/protection/ProtectionManaging.kt`
       exatamente conforme `contracts/protection-managing.md` (depends on T005, T008)
-- [ ] T011 [P] Implementar `FakeProtectionManaging` (implementação em memória, permite forçar
+- [X] T011 [P] Implementar `FakeProtectionManaging` (implementação em memória, permite forçar
       qualquer `ProtectionState` incluindo `Erro`) em
       `app/src/main/java/io/blindado/android/fake/FakeProtectionManaging.kt` — satisfaz as 5
       regras do contrato de teste em `contracts/protection-managing.md` (depends on T010)
-- [ ] T012 [P] Implementar `ProtectionProfileStore` (DataStore Preferences, persiste
+- [X] T012 [P] Implementar `ProtectionProfileStore` (DataStore Preferences, persiste
       `ProtectionProfile`) em
       `app/src/main/java/io/blindado/android/data/ProtectionProfileStore.kt` (depends on T008)
-- [ ] T013 [P] Configurar o tema Compose (Material 3, claro/escuro, tipografia em `sp`) em
+- [X] T013 [P] Configurar o tema Compose (Material 3, claro/escuro, tipografia em `sp`) em
       `app/src/main/java/io/blindado/android/ui/theme/` (Princípio VI)
-- [ ] T014 Criar `BlindadoApplication.kt` e `MainActivity.kt` com o scaffold de navegação
+- [X] T014 Criar `BlindadoApplication.kt` e `MainActivity.kt` com o scaffold de navegação
       (bottom navigation Material 3 com três destinos: Início, Testar, Ajustes — três, não
       quatro, per `spec.md` § Assumptions) em
       `app/src/main/java/io/blindado/android/{BlindadoApplication.kt,MainActivity.kt}` (depends
@@ -118,42 +118,42 @@ remover a proteção pelo app e confirmar volta a "Não configurado" (roteiro co
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] Implementar `BlindadoVpnService` (extends `android.net.VpnService`) com
+- [X] T017 [US1] Implementar `BlindadoVpnService` (extends `android.net.VpnService`) com
       `Builder.addAddress()`/`addDnsServer()`/`addRoute()` apontando só para o endereço virtual
       local (research.md #3 — sem rota `0.0.0.0/0`), e `startForeground()` com notificação
       persistente e o `foregroundServiceType` de `research.md` #2 (a ser confirmado em
       dispositivo físico — não commitar essa parte sem validar, ver T046) em
       `app/src/main/java/io/blindado/android/protection/BlindadoVpnService.kt` (depends on T010)
-- [ ] T018 [P] [US1] Implementar `DohResolver`: requisição POST RFC 8484 (`Content-Type:
+- [X] T018 [P] [US1] Implementar `DohResolver`: requisição POST RFC 8484 (`Content-Type:
       application/dns-message`, corpo binário wire-format) via `HttpsURLConnection` nativo em
       `app/src/main/java/io/blindado/android/protection/DohResolver.kt` (research.md #4)
-- [ ] T019 [P] [US1] Implementar `DnsPacketCodec` (parsing/encoding mínimo de pacote DNS UDP
+- [X] T019 [P] [US1] Implementar `DnsPacketCodec` (parsing/encoding mínimo de pacote DNS UDP
       porta 53) em `app/src/main/java/io/blindado/android/protection/DnsPacketCodec.kt`
-- [ ] T020 [US1] Implementar `BlockList` (carrega `res/raw/blocklist.txt`, expõe checagem de
+- [X] T020 [US1] Implementar `BlockList` (carrega `res/raw/blocklist.txt`, expõe checagem de
       domínio bloqueado por sufixo) em
       `app/src/main/java/io/blindado/android/protection/BlockList.kt` (research.md #5)
-- [ ] T021 [P] [US1] Adicionar `app/src/main/res/raw/blocklist.txt` com uma lista inicial
+- [X] T021 [P] [US1] Adicionar `app/src/main/res/raw/blocklist.txt` com uma lista inicial
       curada de domínios conhecidos de anúncios/rastreadores (um domínio por linha)
-- [ ] T022 [US1] Implementar o adaptador `ProtectionManaging` real ao redor de
+- [X] T022 [US1] Implementar o adaptador `ProtectionManaging` real ao redor de
       `BlindadoVpnService` (`install`/`remove`/`updateProfile`/`currentState`/`stateChanges`)
       em `app/src/main/java/io/blindado/android/protection/RealProtectionManaging.kt` (depends
       on T017, T018, T019, T020)
-- [ ] T023 [US1] Registrar `BlindadoVpnService` no `AndroidManifest.xml` com
+- [X] T023 [US1] Registrar `BlindadoVpnService` no `AndroidManifest.xml` com
       `android:permission="android.permission.BIND_VPN_SERVICE"` e o `intent-filter` para
       `android.net.VpnService`, mais o `foregroundServiceType` e o metadata
       `PROPERTY_SPECIAL_USE_FGS_SUBTYPE` de `research.md` #2 (depends on T017)
-- [ ] T024 [US1] Implementar `HomeViewModel` (expõe `ProtectionState`, ações `blindar()`/
+- [X] T024 [US1] Implementar `HomeViewModel` (expõe `ProtectionState`, ações `blindar()`/
       `remover()`) em `app/src/main/java/io/blindado/android/ui/home/HomeViewModel.kt` (depends
       on T010, T022)
-- [ ] T025 [US1] Implementar `HomeScreen` composable: indicador visual grande de estado, botão
+- [X] T025 [US1] Implementar `HomeScreen` composable: indicador visual grande de estado, botão
       "Blindar meu Android", botão de remover proteção, mensagem de erro usando o `ErrorReason`
       real (nunca um diagnóstico inventado — FR-005), `contentDescription`/semantics para
       TalkBack em cada elemento (Princípio VI) em
       `app/src/main/java/io/blindado/android/ui/home/HomeScreen.kt` (depends on T024)
-- [ ] T026 [US1] Integrar o fluxo de permissão `VpnService.prepare()` +
+- [X] T026 [US1] Integrar o fluxo de permissão `VpnService.prepare()` +
       `ActivityResultContracts.StartActivityForResult` em `MainActivity.kt`/`HomeScreen.kt`,
       encaminhando o resultado (concedida/negada) para `HomeViewModel` (depends on T024, T025)
-- [ ] T027 [US1] Implementar a detecção de permissão revogada externamente (observar no
+- [X] T027 [US1] Implementar a detecção de permissão revogada externamente (observar no
       `onResume`/ciclo de vida e emitir em `stateChanges` — FR-004) em `RealProtectionManaging`
       (depends on T022)
 
@@ -179,17 +179,17 @@ salvar (roteiro completo em `quickstart.md` § US2).
 
 ### Implementation for User Story 2
 
-- [ ] T029 [US2] Definir o catálogo de provedores suportados por nível (AdGuard DNS e Control D,
+- [X] T029 [US2] Definir o catálogo de provedores suportados por nível (AdGuard DNS e Control D,
       hostnames DoH confirmados contra a documentação oficial de cada provedor — não inventados
       — research.md #6) em
       `app/src/main/java/io/blindado/android/protection/ProviderCatalog.kt`
-- [ ] T030 [P] [US2] Implementar `DohUrlValidator` (valida HTTPS + alcançabilidade de uma URL
+- [X] T030 [P] [US2] Implementar `DohUrlValidator` (valida HTTPS + alcançabilidade de uma URL
       DoH personalizada antes de salvar — FR-007) em
       `app/src/main/java/io/blindado/android/protection/DohUrlValidator.kt`
-- [ ] T031 [US2] Implementar `ProtectionLevelViewModel` em
+- [X] T031 [US2] Implementar `ProtectionLevelViewModel` em
       `app/src/main/java/io/blindado/android/ui/level/ProtectionLevelViewModel.kt` (depends on
       T012, T022, T029, T030)
-- [ ] T032 [US2] Implementar `ProtectionLevelScreen` composable (seletor de nível, seletor de
+- [X] T032 [US2] Implementar `ProtectionLevelScreen` composable (seletor de nível, seletor de
       provedor, campo de URL personalizada com erro inline) com semantics para TalkBack em
       `app/src/main/java/io/blindado/android/ui/level/ProtectionLevelScreen.kt` (depends on
       T031)
@@ -214,14 +214,14 @@ resultado é sempre "Indeterminado" (roteiro completo em `quickstart.md` § US3)
 
 ### Implementation for User Story 3
 
-- [ ] T034 [P] [US3] Definir a lista fixa de domínios de teste (anúncios/rastreadores + um
+- [X] T034 [P] [US3] Definir a lista fixa de domínios de teste (anúncios/rastreadores + um
       domínio comum) em `app/src/main/java/io/blindado/android/protection/TestDomains.kt`
-- [ ] T035 [P] [US3] Implementar `NetworkStatus` (checagem de conectividade real via
+- [X] T035 [P] [US3] Implementar `NetworkStatus` (checagem de conectividade real via
       `ConnectivityManager`) em `app/src/main/java/io/blindado/android/protection/NetworkStatus.kt`
-- [ ] T036 [US3] Implementar `TestViewModel` (roda a checagem item a item sem travar a tela,
+- [X] T036 [US3] Implementar `TestViewModel` (roda a checagem item a item sem travar a tela,
       agrega `OverallResult`) em `app/src/main/java/io/blindado/android/ui/test/TestViewModel.kt`
       (depends on T009, T034, T035)
-- [ ] T037 [US3] Implementar `TestScreen` composable (lista de itens com status individual,
+- [X] T037 [US3] Implementar `TestScreen` composable (lista de itens com status individual,
       banner de resultado geral) com semantics para TalkBack em
       `app/src/main/java/io/blindado/android/ui/test/TestScreen.kt` (depends on T036)
 
@@ -247,10 +247,10 @@ o conteúdo completo (roteiro completo em `quickstart.md` § US4).
 
 - [ ] T039 [P] [US4] Redigir o texto da tela de Transparência (o que o app faz/não faz, mesmo
       recorte de `spec.md` § User Story 4) e o link para a política de privacidade completa
-- [ ] T040 [US4] Implementar `SettingsViewModel` (expõe provedor DNS atual + texto de
+- [X] T040 [US4] Implementar `SettingsViewModel` (expõe provedor DNS atual + texto de
       privacidade) em `app/src/main/java/io/blindado/android/ui/settings/SettingsViewModel.kt`
       (depends on T012)
-- [ ] T041 [US4] Implementar `SettingsScreen` composable (texto de Transparência + link) com
+- [X] T041 [US4] Implementar `SettingsScreen` composable (texto de Transparência + link) com
       semantics para TalkBack em
       `app/src/main/java/io/blindado/android/ui/settings/SettingsScreen.kt` (depends on T040)
 
@@ -262,6 +262,18 @@ independente.
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 **Purpose**: validações finais que afetam múltiplas histórias de usuário
+
+**Nota (2026-09-24)**: T042/T046 foram parcialmente validados num **emulador** Android 14
+(Pixel 7, `google_apis/arm64-v8a`), não num dispositivo físico — ainda contam como pendentes
+para fins de release, mas os resultados foram reais e positivos, não simulados: US1 completo
+(permissão → diálogo nativo do sistema → `establish()` bem-sucedido → ícone de chave 🔑 real na
+barra de status → estado "Blindado" → "Remover proteção" → ícone some, estado volta a "Não
+configurado"), navegação para "Nível de proteção" com seleção de nível/provedor funcionando
+(US2), tela de Teste e Ajustes renderizando corretamente (US3/US4). Nenhum crash no logcat. O
+`foregroundServiceType="specialUse"` de `research.md` #2 funcionou sem erro nesse emulador — um
+dado a favor, mas emulador não é garantia de comportamento idêntico em hardware real de
+fabricantes diferentes (Samsung, Xiaomi etc. costumam ter gerenciamento de bateria mais agressivo
+que o AOSP/emulador) — T042/T046 continuam abertas até validação em aparelho físico.
 
 - [ ] T042 Rodar a validação completa de `quickstart.md` (todas as 4 histórias) em pelo menos
       um dispositivo Android físico

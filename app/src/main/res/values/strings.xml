@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Blindado</string>
+
+    <string name="notification_channel_name">Proteção ativa</string>
+    <string name="notification_title">Blindado está ativo</string>
+    <string name="notification_text">DNS criptografado em todo o sistema. Toque para abrir o app.</string>
+</resources>

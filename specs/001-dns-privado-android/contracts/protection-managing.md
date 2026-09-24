@@ -10,6 +10,16 @@ interface ProtectionManaging {
     suspend fun currentState(): ProtectionState
 
     /**
+     * Adicionado durante a implementação (não previsto no desenho inicial deste contrato):
+     * retorna o Intent do diálogo nativo de permissão de VPN se ainda não concedida, ou `null`
+     * se já concedida. A UI (que tem um Activity) lança esse Intent via
+     * ActivityResultContracts antes de chamar [install] — resolve o problema de o diálogo de
+     * permissão do Android exigir um Activity, que esta interface (consumida por ViewModels)
+     * não tem. Implementações fake sempre retornam `null`.
+     */
+    fun vpnPermissionIntent(): android.content.Intent?
+
+    /**
      * Solicita a permissão de VPN do sistema (se necessário) e, se concedida, conecta a
      * VpnService com o perfil informado. Suspende até a conexão ser confirmada ou falhar.
      *
