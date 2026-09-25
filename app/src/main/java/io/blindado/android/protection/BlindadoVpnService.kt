@@ -30,6 +30,14 @@ import java.io.IOException
  * (`addDnsServer` + rota só para esse endereço virtual), então o Android só entrega a esta
  * interface TUN o tráfego DNS — nenhum outro tráfego dos outros apps passa por aqui.
  *
+ * `addDisallowedApplication(packageName)` exclui o PRÓPRIO Blindado do seu túnel (research.md
+ * #7 update, achado em teste em dispositivo físico real): sem isso, a resolução do hostname do
+ * provedor DoH (ex. `dns.adguard-dns.com`, `DohResolver`/`ProviderCatalog`) vira, ela mesma,
+ * uma consulta DNS que o sistema roteia de volta para este túnel — mas o único código capaz de
+ * responder a essa consulta (`runPacketLoop`, single-threaded) já está bloqueado esperando essa
+ * mesma resolução terminar. Deadlock circular que derruba TODA resolução DNS do aparelho
+ * (inclusive de outros apps, ex. Play Store), não só domínios bloqueados.
+ *
  * PENDÊNCIA (research.md #2, tasks.md T046): o `foregroundServiceType="specialUse"` declarado
  * no Manifest ainda precisa ser confirmado em dispositivo físico Android 14+ antes de considerar
  * este serviço pronto para produção.
@@ -86,6 +94,7 @@ class BlindadoVpnService : VpnService() {
                 .addAddress(VPN_ADDRESS, VPN_ADDRESS_PREFIX_LENGTH)
                 .addDnsServer(VPN_ADDRESS)
                 .addRoute(VPN_ADDRESS, 32) // só o endereço DNS virtual — nada de 0.0.0.0/0
+                .addDisallowedApplication(packageName) // ver nota abaixo — achado em teste real de hardware
                 .setSession("Blindado")
                 .setBlocking(false)
 

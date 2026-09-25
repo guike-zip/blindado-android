@@ -220,3 +220,32 @@ terceiros — não algo que escolher outra imagem ou outro AVD resolveria.
 **T042 continua sendo o único caminho para confirmar se o bloqueio de domínio funciona de
 verdade** — mais investigação em emulador nesta máquina não tem probabilidade realista de resolver
 essa incerteza; o próximo dado útil só vem de hardware físico real.
+
+**Terceira atualização (2026-09-25): T042 rodado em hardware físico real, achado um bug real
+(não relacionado à limitação do emulador acima)**. Ao ativar a proteção num Android físico, a
+Play Store parou de baixar qualquer coisa — ou seja, TODA resolução DNS do aparelho quebrou, não
+só domínios da lista de bloqueio (a lista embutida em si foi auditada e não contém nenhum domínio
+usado pela Play Store — `BlockList.isBlocked` também já fazia correspondência correta por sufixo
+de rótulo, não substring).
+
+Causa raiz real, confirmada lendo o código: `BlindadoVpnService.connect()` nunca excluía o
+próprio processo do Blindado do seu próprio túnel (nenhuma chamada a `protect()` nem a
+`addDisallowedApplication` em nenhum lugar do código). Como os quatro provedores DoH em
+`ProviderCatalog` são todos hostnames (`dns.adguard-dns.com`, `freedns.controld.com`, etc.), a
+própria resolução do hostname do provedor DoH dentro de `DohResolver.resolve()` (via
+`URL(...).openConnection()`) dispara uma consulta DNS do sistema — que o Android roteia de volta
+para o túnel do próprio Blindado, já que `addDnsServer(VPN_ADDRESS)` registrou o Blindado como o
+resolvedor DNS do sistema. Só que o único código capaz de responder a essa consulta
+(`runPacketLoop`, um loop sequencial de uma única coroutine) já está bloqueado esperando essa
+mesma resolução terminar — deadlock circular. Isso expira só depois do timeout de 5s do
+`HttpsURLConnection`, e a consulta é descartada silenciosamente (`continue`), repetindo para
+virtualmente toda consulta DNS do aparelho, de qualquer app — não só do Blindado.
+
+**Fix aplicado**: uma linha em `BlindadoVpnService.connect()` —
+`.addDisallowedApplication(packageName)` no `Builder` — exclui o processo do próprio Blindado do
+seu túnel, deixando a resolução do hostname do provedor DoH (e qualquer outro tráfego de rede do
+próprio app) sair direto pela rede real do aparelho, sem reentrar no túnel. É o padrão
+recomendado pela própria documentação do Android para um `VpnService` local que também precisa
+fazer suas próprias chamadas de rede (mesmo padrão usado por apps como RethinkDNS/DNS66/Intra).
+Testes unitários (25/25) continuam passando; validação de que isso resolve o problema em
+hardware físico real ainda pendente de confirmação do usuário.
