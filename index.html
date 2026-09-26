@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Blindado — DNS privado para iPhone, Mac e Android</title>
-<meta name="description" content="DNS privado e bloqueio de anúncios/rastreadores para iPhone, Mac e Android, sem VPN de tráfego. Entre na lista de espera do acesso antecipado.">
+<meta name="description" content="DNS privado e bloqueio de anúncios/rastreadores para iPhone, Mac e Android, sem VPN de tráfego. Beta aberto e gratuito para iPhone e Android.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -123,15 +123,15 @@ footer .brand{font-size:16px}
 
 <main>
   <div class="hero wrap">
-    <span class="eyebrow">EM DESENVOLVIMENTO — iOS, MAC E ANDROID</span>
+    <span class="eyebrow">BETA ABERTO — IPHONE E ANDROID · MAC EM BREVE</span>
     <h1>DNS privado e bloqueio de anúncios <span class="accent">para iPhone, Mac e Android</span></h1>
     <p class="lede">O Blindado protege sua navegação com DNS criptografado em Wi-Fi e dados móveis, e bloqueia
     anúncios e rastreadores conhecidos — via um túnel 100% local, sem servidor próprio do Blindado.</p>
     <div class="cta-row" id="download-row">
-      <a href="#acesso-antecipado" class="btn btn-primary" id="btn-primary-download">Entrar na lista de espera</a>
+      <a href="#acesso-antecipado" class="btn btn-primary" id="btn-primary-download">Entrar no beta grátis</a>
       <a href="design/privacidade.html" class="btn btn-ghost">Ler a política de privacidade</a>
     </div>
-    <p class="hero-note" id="hero-note">Sem cadastro pago ainda. Avisamos por e-mail assim que abrir na sua loja de apps.</p>
+    <p class="hero-note" id="hero-note">iPhone: convite direto pelo TestFlight. Android: deixe o e-mail da sua conta Google e adicionamos você ao teste do Google Play.</p>
   </div>
 
   <div class="shots wrap">
@@ -139,7 +139,7 @@ footer .brand{font-size:16px}
     <img class="shot" src="design/screenshots/02-nivel-protecao.png" alt="Tela de escolha do nível de proteção: Padrão, Família ou Personalizado">
     <img class="shot" src="design/screenshots/03-ajustes.png" alt="Tela de ajustes com o texto de transparência e privacidade">
   </div>
-  <p class="shots-caption wrap">Capturas do app Android, em testes internos. A versão para iPhone e Mac está em revisão na App Store.</p>
+  <p class="shots-caption wrap">Capturas do app Android, em fase de testes. No iPhone, o beta é pelo TestFlight, o app de testes da Apple.</p>
 
   <section>
     <div class="wrap">
@@ -194,9 +194,12 @@ footer .brand{font-size:16px}
   <section id="acesso-antecipado" class="signup">
     <div class="wrap">
       <div class="section-head">
-        <h2>Seja um dos primeiros a testar</h2>
-        <p>Deixe seu e-mail, diga qual plataforma você usa, e avisamos assim que o Blindado estiver
-        disponível na sua loja de apps.</p>
+        <h2>Entre no beta — é grátis</h2>
+        <p><strong>iPhone:</strong> instale o TestFlight e abra o convite:
+        <a href="https://testflight.apple.com/join/Evt1DGrb">testflight.apple.com/join/Evt1DGrb</a>.</p>
+        <p><strong>Android:</strong> o teste do Google Play é por e-mail. Deixe abaixo o e-mail da sua
+        conta Google e escolha “Android” — adicionamos você ao teste e mandamos o link de instalação.</p>
+        <p><strong>Mac:</strong> o beta ainda não abriu. Deixe seu e-mail para ser avisado primeiro.</p>
       </div>
       <div class="form-card">
         <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd7qlWbgGboHHJbhIgHH770x9WccINdztR_8EwuMDdm49x9QA/viewform?embedded=true" title="Formulário de acesso antecipado do Blindado">Carregando…</iframe>
@@ -218,12 +221,14 @@ footer .brand{font-size:16px}
 
 <script>
 // Links das lojas — trocar de null para a URL real assim que cada revisão for aprovada.
-// Enquanto null, o botão principal leva para a lista de espera (#acesso-antecipado).
+// Enquanto null, o botão principal leva para o beta (TestFlight no iPhone) ou para o formulário.
 var STORE_LINKS = {
   ios: null,    // ex.: "https://apps.apple.com/app/idXXXXXXXXX"
   macos: null,  // ex.: "https://apps.apple.com/app/idXXXXXXXXX"
   android: null // ex.: "https://play.google.com/store/apps/details?id=io.blindado.android"
 };
+// Beta público do iPhone (grupo "Beta público" do TestFlight, válido até 21/12/2026).
+var BETA_IOS = "https://testflight.apple.com/join/Evt1DGrb";
 
 (function () {
   var ua = navigator.userAgent || "";
@@ -234,7 +239,7 @@ var STORE_LINKS = {
   var platform = isIOS ? "ios" : isMac ? "macos" : isAndroid ? "android" : null;
   var storeLabel = isIOS ? "Baixar na App Store" : isMac ? "Baixar na Mac App Store" : isAndroid ? "Baixar no Google Play" : null;
 
-  if (!platform) return; // desktop não-Mac (ex. Windows/Linux) fica com "Entrar na lista de espera"
+  if (!platform) return; // desktop não-Mac (ex. Windows/Linux) fica com "Entrar no beta grátis" (leva ao formulário)
 
   var link = STORE_LINKS[platform];
   var btn = document.getElementById("btn-primary-download");
@@ -245,9 +250,14 @@ var STORE_LINKS = {
     btn.textContent = storeLabel;
     btn.removeAttribute("id");
     note.textContent = "Já disponível — toque para instalar.";
+  } else if (isIOS) {
+    btn.href = BETA_IOS;
+    btn.textContent = "Entrar no beta pelo TestFlight";
+    note.textContent = "Detectamos iPhone — instale o TestFlight (app de testes da Apple) e toque no botão acima.";
+  } else if (isAndroid) {
+    note.textContent = "Detectamos Android — deixe o e-mail da sua conta Google no formulário abaixo e adicionamos você ao teste do Google Play.";
   } else {
-    note.textContent = "Detectamos " + (isIOS ? "iPhone" : isMac ? "Mac" : "Android") +
-      " — ainda em revisão na loja. Entre na lista de espera para ser avisado primeiro.";
+    note.textContent = "Detectamos Mac — o beta para Mac ainda não abriu. Deixe seu e-mail no formulário para ser avisado primeiro.";
   }
 })();
 </script>
