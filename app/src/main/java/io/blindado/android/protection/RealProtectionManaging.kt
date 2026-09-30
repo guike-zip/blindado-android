@@ -2,6 +2,7 @@ package io.blindado.android.protection
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.VpnService
 import io.blindado.android.domain.DnsProvider
 import io.blindado.android.domain.ErrorReason
@@ -34,6 +35,10 @@ class RealProtectionManaging(private val context: Context) : ProtectionManaging 
     override suspend fun install(profile: ProtectionProfile) {
         if (vpnPermissionIntent() != null) {
             throw ProtectionException(ErrorReason.PERMISSAO_NEGADA)
+        }
+
+        if (isStrictPrivateDnsActive()) {
+            throw ProtectionException(ErrorReason.DNS_PRIVADO_ESTRITO)
         }
 
         val endpoint = resolveEndpoint(profile)
@@ -87,6 +92,18 @@ class RealProtectionManaging(private val context: Context) : ProtectionManaging 
             delay(100)
             attempts++
         }
+    }
+
+    /**
+     * DNS privado estrito = o sistema exige DoT a um hostname fixo em toda rede, inclusive na
+     * nossa VPN (sem rota para ele). O modo automático (oportunista) não tem hostname e cai
+     * para o DNS da VPN normalmente, então só o estrito impede a proteção.
+     */
+    private fun isStrictPrivateDnsActive(): Boolean {
+        val cm = context.getSystemService(ConnectivityManager::class.java) ?: return false
+        val network = cm.activeNetwork ?: return false
+        val link = cm.getLinkProperties(network) ?: return false
+        return link.isPrivateDnsActive && !link.privateDnsServerName.isNullOrEmpty()
     }
 
     private fun resolveEndpoint(profile: ProtectionProfile): String? {

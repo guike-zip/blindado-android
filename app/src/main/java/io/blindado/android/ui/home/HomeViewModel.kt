@@ -69,10 +69,12 @@ class HomeViewModel(
             try {
                 val profile = profileStore.profile.first()
                 protectionManaging.install(profile)
+                refreshState()
             } catch (e: ProtectionException) {
+                // Sem refreshState aqui: erros detectados antes de a VpnService subir (ex.
+                // DNS_PRIVADO_ESTRITO) não existem no estado do serviço e seriam apagados.
                 _state.value = ProtectionState.Erro(e.reason)
             } finally {
-                refreshState()
                 _isBusy.value = false
             }
         }

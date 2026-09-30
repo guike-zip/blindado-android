@@ -138,6 +138,7 @@ private fun stateTitle(state: ProtectionState): String = when (state) {
     is ProtectionState.Erro -> when (state.motivo) {
         ErrorReason.PERMISSAO_NEGADA -> "Permissão de VPN necessária"
         ErrorReason.PERMISSAO_REVOGADA -> "Proteção foi desativada"
+        ErrorReason.DNS_PRIVADO_ESTRITO -> "DNS privado já está ativo"
         ErrorReason.FALHA_DESCONHECIDA -> "Não foi possível blindar o Android"
     }
 }
@@ -156,6 +157,10 @@ private fun stateBody(state: ProtectionState): String = when (state) {
         ErrorReason.PERMISSAO_REVOGADA ->
             "A permissão de VPN foi revogada fora do app (outro app de VPN, ou nos Ajustes do " +
                 "sistema). Toque para reativar."
+        ErrorReason.DNS_PRIVADO_ESTRITO ->
+            "Seu Android usa um DNS privado fixo (Ajustes > Rede e internet > DNS privado), que " +
+                "impede o Blindado de funcionar e deixaria o aparelho sem internet. Mude o DNS " +
+                "privado para \"Automático\" ou \"Desativado\" e toque de novo."
         ErrorReason.FALHA_DESCONHECIDA ->
             "Algo deu errado ao ativar a proteção. Tente de novo — se persistir, isso é um bug " +
                 "real, não um conflito."

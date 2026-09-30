@@ -18,6 +18,13 @@ enum class ErrorReason {
     PERMISSAO_REVOGADA,
 
     /**
+     * O aparelho usa DNS privado em modo estrito (hostname, ex. dns.adguard.com). O Android
+     * faz o DNS-over-TLS por dentro da VPN do Blindado, que só tem rota para o DNS virtual, e
+     * toda resolução do aparelho (inclusive Play Store) falha — a rede VPN fica PrivateDnsBroken.
+     */
+    DNS_PRIVADO_ESTRITO,
+
+    /**
      * Causa real não identificável pela API do Android. NUNCA usado como substituto de
      * investigar a causa real (FR-005) — sempre carrega a exceção/mensagem original do
      * sistema para diagnóstico (ver [io.blindado.android.protection.ProtectionException]).
