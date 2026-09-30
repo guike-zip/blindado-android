@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import io.blindado.android.MainActivity
 import io.blindado.android.R
@@ -49,7 +50,16 @@ class BlindadoVpnService : VpnService() {
         const val ACTION_DISCONNECT = "io.blindado.android.action.DISCONNECT"
         const val EXTRA_DOH_ENDPOINT = "extra_doh_endpoint"
 
+        private const val TAG = "BlindadoDns"
         private const val VPN_ADDRESS = "10.0.0.2"
+
+        /**
+         * Servidor DNS virtual — TEM que ser diferente de [VPN_ADDRESS]. Se fosse o mesmo, o
+         * kernel trataria o destino como endereço local da interface e entregaria a consulta em
+         * loopback (ECONNREFUSED) sem nunca passar pelo TUN: o app não veria nenhuma consulta e
+         * todo DNS do aparelho falharia. Achado em teste no OnePlus 7: tun0 só recebia IPv6.
+         */
+        private const val VPN_DNS_ADDRESS = "10.0.0.3"
         private const val VPN_ADDRESS_PREFIX_LENGTH = 32
         private const val NOTIFICATION_CHANNEL_ID = "blindado_protection"
         private const val NOTIFICATION_ID = 1
@@ -92,11 +102,11 @@ class BlindadoVpnService : VpnService() {
         try {
             val builder = Builder()
                 .addAddress(VPN_ADDRESS, VPN_ADDRESS_PREFIX_LENGTH)
-                .addDnsServer(VPN_ADDRESS)
-                .addRoute(VPN_ADDRESS, 32) // só o endereço DNS virtual — nada de 0.0.0.0/0
+                .addDnsServer(VPN_DNS_ADDRESS)
+                .addRoute(VPN_DNS_ADDRESS, 32) // só o endereço DNS virtual — nada de 0.0.0.0/0
                 .addDisallowedApplication(packageName) // ver nota abaixo — achado em teste real de hardware
                 .setSession("Blindado")
-                .setBlocking(false)
+                .setBlocking(true) // read() do túnel tem que bloquear; não-bloqueante lança EAGAIN e encerra o laço
 
             tunInterface = builder.establish()
             if (tunInterface == null) {
@@ -107,6 +117,11 @@ class BlindadoVpnService : VpnService() {
 
             startForeground(NOTIFICATION_ID, buildNotification())
 
+            // isRunning ANTES de lançar o laço: ele começa com `while (_isRunning.value)` e, se
+            // a thread IO iniciasse antes deste set, sairia na hora sem responder nenhum DNS.
+            _isRunning.value = true
+            _lastError.value = null
+
             serviceScope.launch {
                 blockList.load(this@BlindadoVpnService)
             }
@@ -114,9 +129,6 @@ class BlindadoVpnService : VpnService() {
             packetLoopJob = serviceScope.launch {
                 runPacketLoop(dohEndpoint)
             }
-
-            _isRunning.value = true
-            _lastError.value = null
         } catch (e: Exception) {
             _lastError.value = ErrorReason.FALHA_DESCONHECIDA
             _isRunning.value = false
@@ -129,35 +141,45 @@ class BlindadoVpnService : VpnService() {
         val input = FileInputStream(fd.fileDescriptor)
         val output = FileOutputStream(fd.fileDescriptor)
         val buffer = ByteArray(32_767)
+        Log.i(TAG, "packet loop iniciado")
 
         while (_isRunning.value) {
             val length = try {
                 input.read(buffer)
             } catch (e: IOException) {
+                Log.w(TAG, "leitura do túnel falhou, encerrando loop", e)
                 break // interface fechada (disconnect) — sai do loop
             }
             if (length <= 0) continue
 
-            val query = DnsPacketCodec.tryParseDnsQuery(buffer, length) ?: continue
-            val queryName = DnsPacketCodec.extractQueryName(query.dnsPayload)
+            // Cópia: o buffer é reaproveitado na próxima leitura enquanto a consulta ainda
+            // está em voo. Cada consulta roda em sua própria coroutine — uma resolução lenta
+            // (timeout de 5s) não pode travar as demais, senão todo o DNS do aparelho engasga.
+            val packet = buffer.copyOf(length)
+            serviceScope.launch {
+                val query = DnsPacketCodec.tryParseDnsQuery(packet, packet.size) 
+                    ?: run { Log.d(TAG, "pacote ignorado (não é DNS IPv4/UDP), len=${packet.size}, v=${packet[0].toInt() shr 4}"); return@launch }
+                val queryName = DnsPacketCodec.extractQueryName(query.dnsPayload)
 
-            val responsePayload = if (queryName != null && blockList.isBlocked(queryName)) {
-                DnsPacketCodec.buildBlockedResponse(query.dnsPayload)
-            } else {
-                try {
-                    dohResolver.resolve(dohEndpoint, query.dnsPayload)
-                } catch (e: DohResolver.DohException) {
-                    // Falha real de rede/DoH — não bloqueia nem trava, só não responde a essa
-                    // consulta específica (o cliente original tentará de novo).
-                    continue
+                val responsePayload = if (queryName != null && blockList.isBlocked(queryName)) {
+                    DnsPacketCodec.buildBlockedResponse(query.dnsPayload)
+                } else {
+                    try {
+                        dohResolver.resolve(dohEndpoint, query.dnsPayload)
+                    } catch (e: DohResolver.DohException) {
+                        Log.w(TAG, "DoH falhou para $queryName: ${e.message}")
+                        // Falha real de rede/DoH — só não responde a essa consulta (o cliente
+                        // original tentará de novo).
+                        return@launch
+                    }
                 }
-            }
 
-            val responsePacket = DnsPacketCodec.buildDnsResponsePacket(query, responsePayload)
-            try {
-                output.write(responsePacket)
-            } catch (e: IOException) {
-                break
+                val responsePacket = DnsPacketCodec.buildDnsResponsePacket(query, responsePayload)
+                try {
+                    synchronized(output) { output.write(responsePacket) }
+                } catch (e: IOException) {
+                    // Interface fechada (disconnect) — nada a fazer.
+                }
             }
         }
     }
