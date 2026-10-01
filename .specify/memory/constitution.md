@@ -1,5 +1,14 @@
 <!--
 Sync Impact Report
+- Version change: 1.0.0 -> 1.1.0 (MINOR) on 2026-10-01
+- Modified principles: none (local); added the shared block "Princípios Comuns v1.0"
+- Added sections: Princípios Comuns (C1-C7)
+- Removed sections: none
+- Follow-up TODOs: declare N/A, with a reason, any common principle that does not apply.
+-->
+
+<!--
+Sync Impact Report
 Version change: (none) → 1.0.0
 Modified principles: n/a (ratificação inicial)
 Added sections:
@@ -142,6 +151,52 @@ DEVEM passar antes do merge. Qualquer mudança que afete o estado de proteção 
 usuário concluída, já que o comportamento real de `VpnService` (conexão, revogação de permissão,
 troca de rede) não é confiável em emulador.
 
+<!-- COMUM:BEGIN v1.0 -->
+## Princípios Comuns (v1.0)
+
+> Núcleo compartilhado por todos os projetos do fundador. **Não edite este bloco à mão:** ele é
+> mantido por sincronização a partir de uma fonte única. Para mudar, altere a fonte, suba a versão
+> e rode o script de sincronização. Estes princípios **complementam** os princípios locais.
+>
+> Aplicação: um princípio que não se aplica ao tipo do projeto é declarado **N/A** na constituição
+> local, com o motivo. Em conflito com um princípio local, vale a regra **mais restritiva**.
+
+### C1. Spec antes de código
+Nenhuma funcionalidade nova sem spec revisada em `specs/`. Spec e código mudam no mesmo commit; na
+divergência, corrige-se um dos dois, nunca se ignora. **Verificação:** o plano aponta a spec que o
+motiva.
+
+### C2. Segurança e privacidade por padrão (LGPD)
+Coleta-se o mínimo de dados. Dado sensível não é lido nem escrito direto pelo cliente: passa por
+servidor ou por regra de acesso validada. Toda regra de acesso tem teste que falha se ela abrir
+demais. **Verificação:** o plano lista os dados tratados e quem acessa cada um.
+
+### C3. Segredos fora do repositório
+Chaves, keystores, `.env` e credenciais nunca entram no git e têm cópia durável fora da máquina de
+trabalho. Antes de publicar, abre-se o artefato final e procura-se placeholder. **Verificação:** o
+build de loja foi conferido contra valores de exemplo (`CHANGE-ME`) e de desenvolvimento.
+
+### C4. Honestidade
+Nenhum texto (produto, loja, marketing) promete o que o produto não faz. Todo número citado tem
+fonte e data. Falha não pode ser silenciosa: ou aparece, ou é registrada. **Verificação:** cada
+afirmação nova aponta para o código ou a spec que a sustenta.
+
+### C5. Teste onde há dinheiro, risco legal ou segurança
+Pagamento, permissão e dado sensível têm teste. Toda guarda é provada com **teste negativo**:
+remove-se o conserto e confirma-se que o teste fica vermelho. **Verificação:** o plano diz onde está
+o teste negativo de cada guarda nova.
+
+### C6. Ambientes isolados e deploy deliberado
+Desenvolvimento e produção nunca se misturam. Antes de mexer em banco ou publicar, confirma-se o
+ambiente (por exemplo, a contagem de um registro conhecido). Deploy e envio para loja são atos
+conscientes, nunca efeito colateral de um push. **Verificação:** os passos de deploy do plano trazem a
+conferência de ambiente.
+
+### C7. Simplicidade
+A solução mais simples que cumpre a spec vence. Abstração só depois da segunda necessidade real;
+complexidade extra se justifica por escrito no plano.
+<!-- COMUM:END -->
+
 ## Governance
 
 Esta constituição tem precedência sobre qualquer outra prática ou convenção do projeto. Emendas
@@ -151,4 +206,4 @@ Amended". Toda revisão de código e todo plano de implementação DEVEM verific
 os princípios aqui descritos; complexidade que viole o Princípio VII (Simplicidade) DEVE ser
 justificada explicitamente no plano ou rejeitada.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-09-24
+**Version**: 1.1.0 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-10-01 (Princípios Comuns v1.0)
