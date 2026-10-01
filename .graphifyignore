@@ -1,0 +1,26 @@
+# Nunca entram no grafo: dependências, build, segredos e mídia.
+**/node_modules/
+**/.next/
+**/build/
+**/.gradle/
+**/.dart_tool/
+**/vendor/
+**/Pods/
+**/DerivedData/
+.claude/worktrees/
+graphify-out/
+**/marketing/remotion/
+**/*.mp4
+**/*.mov
+**/*.wav
+**/*.keystore
+**/*.jks
+**/*.p8
+**/*.p12
+**/*.mobileprovision
+**/.env
+**/.env.*
+**/google-services.json
+**/GoogleService-Info.plist
+**/*.xcconfig.local
+**/Secrets-*.xcconfig

@@ -29,3 +29,6 @@ vendor/bundle/
 # Artefatos gerados pelo fastlane
 fastlane/report.xml
 fastlane/README.md
+
+# graphify
+graphify-out/
