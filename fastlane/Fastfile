@@ -1,9 +1,10 @@
 # https://docs.fastlane.tools
 #
-# Uso: `bundle exec fastlane android internal_test` — sempre via `bundle exec` (Gemfile fixa a
-# versão do fastlane; nunca rode `fastlane` instalado global).
+# Uso: `bundle exec fastlane android internal_test` / `bundle exec fastlane android
+# update_store_listing` — sempre via `bundle exec` (Gemfile fixa a versão do fastlane; nunca
+# rode `fastlane` instalado global).
 #
-# GATE: a lane `internal_test` exige a chave de conta de serviço em
+# GATE: as duas lanes abaixo exigem a chave de conta de serviço em
 # keystore/play-fastlane-supply.json (gitignored) — ver keystore/README.md.
 
 default_platform(:android)
@@ -14,7 +15,7 @@ platform :android do
     gradle(task: "bundleRelease")
   end
 
-  desc "Builda e envia a versão mais recente para a faixa de Testes Internos do Play Console — nunca para produção (essa lane não tem opção de faixa configurável de propósito)."
+  desc "Builda e envia a versão mais recente para a faixa de Testes Internos do Play Console — nunca para produção (essa lane não tem opção de faixa configurável de propósito). Não mexe na ficha da loja (metadata/imagens/screenshots) — isso é a lane update_store_listing, separada de propósito para não publicar texto/imagens sem revisão manual."
   lane :internal_test do
     build_release
     upload_to_play_store(
@@ -25,6 +26,19 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true,
       release_status: "completed",
+    )
+  end
+
+  desc "Sobe só a ficha da loja (fastlane/metadata/android/pt-BR: título, descrições, ícone, feature graphic e phoneScreenshots) para o Play Console — sem binário nenhum. Revise o texto e os PNGs antes de rodar; isso vai direto para a listagem pública."
+  lane :update_store_listing do
+    upload_to_play_store(
+      track: "internal",
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: false,
+      skip_upload_images: false,
+      skip_upload_screenshots: false,
+      skip_upload_changelogs: true,
     )
   end
 end
