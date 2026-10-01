@@ -24,3 +24,6 @@ graphify-out/
 **/GoogleService-Info.plist
 **/*.xcconfig.local
 **/Secrets-*.xcconfig
+
+# skills/config do Claude Code: ruído no grafo
+**/.claude/
