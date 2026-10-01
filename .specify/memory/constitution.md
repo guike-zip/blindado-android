@@ -1,5 +1,15 @@
 <!--
 Sync Impact Report
+- Version change: 1.1.0 -> 1.1.1 (PATCH) on 2026-10-01
+- Modified principles: IX deixa de ser "herdado, sujeito a revisão": o dono confirmou o modelo para
+  o Android em 2026-10-01 (spec 004-compra-uma-por-loja do repositório blindado, decisões D1 e D2).
+  Nenhuma regra muda; só o status.
+- Added/Removed sections: none
+- Follow-up TODOs: none
+-->
+
+<!--
+Sync Impact Report
 - Version change: 1.0.0 -> 1.1.0 (MINOR) on 2026-10-01
 - Modified principles: none (local); added the shared block "Princípios Comuns v1.0"
 - Added sections: Princípios Comuns (C1-C7)
@@ -20,7 +30,7 @@ Removed sections: n/a
 Deferred TODOs:
   - Princípio IX (modelo de negócio) herda a suposição do projeto irmão iOS (pago, download
     único, sem IAP) sem confirmação explícita do usuário para o Android — revisar antes de
-    configurar preço na Play Console.
+    configurar preço na Play Console. [RESOLVIDO em 2026-10-01: confirmado pelo dono; ver v1.1.1]
 Templates requiring follow-up: specs/ ainda não existe neste repo — nenhuma feature spec para
   sincronizar ainda. A primeira spec (/speckit-specify) deve referenciar os Princípios II, III e
   V ao decidir a arquitetura da VpnService.
@@ -121,7 +131,7 @@ criptografado) cedo em hardware real antes de investir nas demais histórias, j�
 comportamento de `VpnService` em emulador não é confiável o suficiente para servir de critério de
 aceite.
 
-### IX. App Pago de Download Único (Sem Compras Internas) — herdado, sujeito a revisão
+### IX. App Pago de Download Único (Sem Compras Internas)
 Por padrão, o Blindado para Android segue o mesmo modelo do app irmão de iOS: distribuído como
 aplicativo pago de download único, com preço definido na Google Play Console, sem compras dentro
 do aplicativo, assinaturas, paywall, Google Play Billing ou qualquer mecanismo de bloqueio de
@@ -129,9 +139,11 @@ recursos. Todo usuário que baixa o app DEVE ter acesso completo e imediato a to
 proteção e ao bloqueio de anúncios/rastreadores em todo o sistema — não existe versão "Pro" nem
 recurso premium.
 Rationale: consistência com o produto irmão e com o Princípio I (nenhuma infraestrutura própria
-de cobrança ou validação de recibos). **Esta suposição foi herdada do projeto iOS e ainda não foi
-confirmada explicitamente pelo usuário para o Android** — revisar antes de configurar preço na
-Play Console (ver Sync Impact Report).
+de cobrança ou validação de recibos). **Confirmado pelo dono para o Android em 2026-10-01**
+(spec `004-compra-uma-por-loja` do repositório `blindado`, decisões D1 e D2): o modelo deixou de
+ser suposição herdada do iOS. Uma compra vale para a loja onde foi feita, sem conta de usuário
+(Princípio I); a família compartilha pela Biblioteca da Família do Google Play. Compras na App
+Store e no Google Play são separadas.
 
 ## Padrões de Qualidade e Segurança
 
@@ -206,4 +218,4 @@ Amended". Toda revisão de código e todo plano de implementação DEVEM verific
 os princípios aqui descritos; complexidade que viole o Princípio VII (Simplicidade) DEVE ser
 justificada explicitamente no plano ou rejeitada.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-10-01 (Princípios Comuns v1.0)
+**Version**: 1.1.1 | **Ratified**: 2026-09-24 | **Last Amended**: 2026-10-01 (Princípio IX confirmado para o Android)
